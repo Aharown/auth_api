@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :authorize_request, only: [:me]
+
   def create
     user = User.new(user_params)
 
@@ -9,6 +11,10 @@ class UsersController < ApplicationController
       render json: { errors: user.errors.full_messages },
     status: :unprocessable_entity
     end
+  end
+
+  def me
+    render json: { id: current_user.id, email: current_user.email }, status: :ok
   end
 
   private
