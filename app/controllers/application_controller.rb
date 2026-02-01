@@ -9,12 +9,19 @@ class ApplicationController < ActionController::API
 
   def authorize_request
     header = request.headers['Authorization']
+    return render json: { error: 'Missing token' }, status: :unauthorized unless header
+
     token = header.split(' ').last if header
     decoded = JsonWebToken.decode(token)
-    return render json: { error: 'Unauthorized' }, status: :unauthorized unless decoded
+
+    case decoded
+    when :expired
+      return render json: { error: 'Token has expired' }, status: :unauthorized
+    when nil
+      return render json: { error: 'Invalid token' }, status: :unauthorized
+    end
 
     @current_user = User.find(decoded[:user_id]) if decoded
-
     return render json: { error: 'Unauthorized' }, status: :unauthorized unless @current_user
   end
 
