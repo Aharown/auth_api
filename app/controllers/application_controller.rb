@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
     return render json: { error: 'Missing token' }, status: :unauthorized unless header
 
     token = header.split(' ').last if header
-    decoded = JsonWebToken.decode(token)
+    decoded = JsonDecoder.call(token)
 
     case decoded
     when :expired
