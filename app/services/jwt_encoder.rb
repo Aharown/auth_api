@@ -3,6 +3,7 @@ class JwtEncoder
 
   def self.call(payload, exp = 24.hours.from_now)
     payload[:exp] = exp.to_i
-    JWT.encode(payload, SECRET_KEY, 'HS256')
+    JWT.encode(payload,       Rails.application.secret_key_base,
+    'HS256')
   end
 end
