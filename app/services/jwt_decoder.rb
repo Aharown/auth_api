@@ -1,4 +1,6 @@
 class JwtDecoder
+  SECRET_KEY = Rails.application.secret_key_base
+
   def self.call(token)
     decoded = JWT.decode(token, SECRET_KEY, true,
     algorithm: 'HS256')[0]
