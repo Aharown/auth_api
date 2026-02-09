@@ -25,5 +25,5 @@ class ApplicationController < ActionController::API
     return render json: { error: 'Unauthorized' }, status: :unauthorized unless @current_user
   end
 
-  attr_reader :current_user
+  attr_reader :current_user #revise 
 end
