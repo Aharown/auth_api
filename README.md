@@ -34,7 +34,15 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 - JWT Authentication
 
 ## Setup
+
+### Requirements
+- Ruby 3.2.x
+- Rails 7.1.x
+- PostgreSQL
+
+### Installation
 ```bash
 bundle install
-rails db:create db:migrate
+rails db:setup
+Create a `.env` file based on `.env.example` and populate required values before running the server.
 rails s
