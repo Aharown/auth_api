@@ -44,5 +44,5 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 ```bash
 bundle install
 rails db:setup
-Create a `.env` file based on `.env.example` and populate required values before running the server.
+Create a `.env` file based on `.env.example` before running the server.
 rails s
