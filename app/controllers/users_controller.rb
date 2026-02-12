@@ -5,13 +5,15 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     if user.save
-      token = JwtEncoder.call(user_id: user.id)
+      access_token = JwtEncoder.call({ user_id: user.id }, exp: 15.minutes.from_now, type: 'access')
+      refresh_token = JwtEncoder.call({ user_id: user.id }, exp: 7.days.from_now, type: 'refresh')
       render json: {
         user: {
         id: user.id,
         email: user.email
       },
-      token: token,
+      access_token: access_token,
+      refresh_token: refresh_token,
       message: "User created successfully" },
       status: :created
     else
