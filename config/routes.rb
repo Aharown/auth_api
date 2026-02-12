@@ -11,7 +11,8 @@ Rails.application.routes.draw do
 
   get "/me", to: "users#me"
 
-
+  post "/refresh", to: "authentication#refresh"
+  
   # Defines the root path route ("/")
   # root "posts#index"
 end
