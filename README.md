@@ -28,6 +28,10 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 
 ---
 
+## Architecture & Request Flow
+
+![Authentication API Architecture](app/requestflow.png)
+
 ## Tech Stack
 - Ruby on Rails
 - PostgreSQL
