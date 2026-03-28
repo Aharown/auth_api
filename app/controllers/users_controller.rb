@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
     if user.save
       access_token = JwtEncoder.call({ user_id: user.id }, exp: 15.minutes.from_now, type: 'access')
-      refresh_token = JwtEncoder.call({ user_id: user.id }, exp: 7.days.from_now, type: 'refresh')
+      refresh_token = RefreshTokenService.create_for(user)
       render json: {
         user: {
         id: user.id,

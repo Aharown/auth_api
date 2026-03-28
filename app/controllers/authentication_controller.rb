@@ -4,7 +4,8 @@ class AuthenticationController < ApplicationController
 
     if user&.authenticate(params[:password])
       access_token = JwtEncoder.call({ user_id: user.id }, exp: 15.minutes.from_now, type: 'access')
-      refresh_token = JwtEncoder.call({ user_id: user.id }, exp: 7.days.from_now, type: 'refresh')
+      refresh_token = RefreshTokenService.create_for(user)
+
       render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
     else
       render json: { error: "Invalid email or password" }, status: :unauthorized
@@ -16,28 +17,14 @@ class AuthenticationController < ApplicationController
     return render json: { error: 'Missing token' }, status: :unauthorized unless header
 
     token = header.split(' ').last
-    decoded = JwtDecoder.call(token)
+    refresh_record = RefreshTokenService.find(token)
+    return render json: { error: 'Invalid token' }, status: :unauthorized unless refresh_record
 
-    case decoded
-    when :expired
-      return render json: { error: 'Refresh token has expired' }, status: :unauthorized
-    when nil
-      return render json: { error: 'Invalid token' }, status: :unauthorized
-    end
+    user = refresh_record.user
+    refresh_record.revoke!
+    new_refresh_token = RefreshTokenService.create_for(user)
+    new_access_token = JwtEncoder.call({ user_id: user.id }, exp: 15.minutes.from_now, type: 'access')
 
-    unless decoded[:type] == 'refresh'
-      return render json: { error: 'Invalid token type' }, status: :unauthorized
-    end
-
-    user = User.find_by(id: decoded[:user_id])
-    return render json: { error: 'Unauthorized' }, status: :unauthorized unless user
-
-    new_access_token = JwtEncoder.call(
-      { user_id: user.id },
-      exp: 15.minutes.from_now,
-      type: 'access'
-    )
-
-    render json: { access_token: new_access_token }
+    render json: { access_token: new_access_token, refresh_token: new_refresh_token  }
   end
 end
