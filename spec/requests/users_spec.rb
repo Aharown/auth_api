@@ -16,7 +16,8 @@ RSpec.describe 'User Registration', type: :request do
       expect(response).to have_http_status(:created)
       expect(User.count).to eq(1)
       expect(json['user']['email']).to eq('test@example.com')
-      expect(json['token']).to be_present
+      expect(json['access_token']).to be_present
+      expect(json['refresh_token']).to be_present
       puts response.status
       puts response.body
     end

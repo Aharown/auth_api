@@ -9,7 +9,7 @@ RSpec.describe 'Protected endpoint', type: :request do
     )
   end
 
-  let(:token) { JwtEncoder.call(user_id: user.id) }
+  let(:token) { JwtEncoder.call({ user_id: user.id }) }
 
   it 'returns user info with valid token' do
     get '/me', headers: auth_header(token)
@@ -33,10 +33,10 @@ RSpec.describe 'Protected endpoint', type: :request do
   end
 
   it 'returns 401 with expired token' do
-    expired_token = JwtEncoder.call(
-      { user_id: user.id },
-      1.hour.ago
-    )
+    expired_token = JwtEncoder.call({ user_id: user.id }, exp: 1.hour.ago)
+    get "/me", headers: { "Authorization" => "Bearer #{expired_token}" }
+    expect(response).to have_http_status(:unauthorized)
+    expect(json['error']).to eq('Token has expired')
 
     get '/me', headers: auth_header(expired_token)
 

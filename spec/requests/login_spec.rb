@@ -17,7 +17,8 @@ RSpec.describe 'Authentication', type: :request do
       }
 
       expect(response).to have_http_status(:ok)
-      expect(json['token']).to be_present
+      expect(json['access_token']).to be_present
+      expect(json['refresh_token']).to be_present
     end
 
     it 'fails with invalid credentials' do
