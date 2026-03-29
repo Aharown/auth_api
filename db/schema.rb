@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_28_005155) do
     t.bigint "user_id", null: false
     t.string "token_digest"
     t.datetime "expires_at"
-    t.boolean "revoked"
+    t.boolean "revoked", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_refresh_tokens_on_user_id"

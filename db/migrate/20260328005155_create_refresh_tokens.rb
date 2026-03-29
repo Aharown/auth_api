@@ -4,7 +4,7 @@ class CreateRefreshTokens < ActiveRecord::Migration[7.1]
       t.references :user, null: false, foreign_key: true
       t.string :token_digest
       t.datetime :expires_at
-      t.boolean :revoked
+      t.boolean :revoked, default: false
 
       t.timestamps
     end
