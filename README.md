@@ -34,6 +34,36 @@ Successful login, the server issues:
 	•	Expires in 7 days
 	•	Contains: user_id, exp, type: "refresh"
 
+Refresh tokens are securely stored in the database as hashed digests.
+
+When a refresh token is used:
+	1.	The server verifies the token
+	2.	The corresponding token record is retrieved
+	3.	The token is revoked
+	4.	A new refresh token is issued
+	5.	A new access token is generated
+
+This process is known as Refresh Token Rotation.
+
+---
+
+### Refresh Token Rotation
+This API implements refresh token rotation to improve security.
+
+When a client sends a refresh request:
+POST /refresh
+Authorization: Bearer <refresh_token>
+
+The server performs the following steps:
+	1.	Validate the refresh token
+	2.	Find the corresponding token record in the database
+	3.	Ensure the tokenmis not revoked or has not expired
+	4.	Revoke the used refresh token
+	5.	Issue a new refresh token
+	6.	Issue a new access token
+
+This prevents a previously used refresh token from being reused if it is compromised.
+
 The server does not store session data.
 Each request is authenticated solely by verifying the JWT signature and claims.
 
