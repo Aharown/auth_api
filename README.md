@@ -103,13 +103,19 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 ## Setup
 
 ### Requirements
-- Ruby 3.2.x
+- Ruby 3.2.x (recommend managing with rbenv or asdf)
 - Rails 7.1.x
-- PostgreSQL
+- PostgreSQL (must be running locally)
 
 ### Installation
-```bash
+
+# Clone and install
+git clone https://github.com/Aharown/auth_api.git
+cd auth_api
 bundle install
+
+# Set up the database
 rails db:setup
-Create a `.env` file based on `.env.example` before running the server.
+
+# Start the server
 rails s
