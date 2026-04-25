@@ -64,10 +64,33 @@ The server performs the following steps:
 
 This prevents a previously used refresh token from being reused if it is compromised.
 
+---
+
+### Token Storage
 The server does not store session data.
 Each request is authenticated solely by verifying the JWT signature and claims.
 
 On each request, the server extracts and decodes the JWT using a dedicated decoder service. If the token is valid and unexpired, the associated user is identified and the request is authorized. If the token is missing, invalid, or expired, the server responds with a 401 Unauthorized error.
+
+The API returns both tokens as JSON upon login or registration. The client is responsible for storing and managing these tokens. Common storage strategies include in-memory variables, sessionStorage, or localStorage — each with different security tradeoffs. This API does not prescribe a storage mechanism.
+The server has no visibility into how or where tokens are stored after they are issued.
+
+---
+
+### Logout & Token Revocation
+Logout is handled by revoking the refresh token server-side. The client initiates this by sending the refresh token to the logout endpoint:
+DELETE /logout
+Authorization: Bearer <refresh_token>
+
+The server will:
+
+- Look up the refresh token record by its digest
+- Mark it as revoked in the database
+- Return a 200 response
+
+Since access tokens are entirely stateless, the server can't invalidate them directly. A revoked session's access token will remain technically valid until its 15-minute expiry. The client is expected to discard both tokens from storage upon receiving a successful logout response.
+
+This is a tradeoff of stateless JWT authentication.
 
 ---
 
