@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get "/me", to: "users#me"
 
   post "/refresh", to: "authentication#refresh"
-  
+
+  delete "/logout", to: "authentication#logout"
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

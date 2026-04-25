@@ -27,4 +27,17 @@ class AuthenticationController < ApplicationController
 
     render json: { access_token: new_access_token, refresh_token: new_refresh_token  }
   end
+
+  def logout
+    header = request.headers['Authorization']
+    return render json: { error: 'Missing token' }, status: :unauthorized unless header
+
+    token = header.split(' ').last
+    refresh_record = RefreshTokenService.find(token)
+    return render json: { error: 'Invalid or already revoked token' }, status: :unauthorized unless refresh_record
+
+    refresh_record.revoke!
+
+    render json: { message: 'Logged out successfully' }, status: :ok
+  end
 end
