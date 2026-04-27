@@ -116,14 +116,14 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 
 ## Architecture & Request Flow
 
-![Authentication API Architecture](app/request-flow2.png)
+![Authentication API Architecture](app/request_flow4.png)
 
 ## Tech Stack
 - Ruby on Rails
 - PostgreSQL
 - JWT Authentication
 
-## Setup
+# Setup
 
 ### Requirements
 - Ruby 3.2.x (recommend managing with rbenv or asdf)
@@ -132,13 +132,13 @@ JWTs are better suited for scalability and flexibility, which makes them a good 
 
 ### Installation
 
-# Clone and install
+### Clone and install
 git clone https://github.com/Aharown/auth_api.git
 cd auth_api
 bundle install
 
-# Set up the database
+### Set up the database
 rails db:setup
 
-# Start the server
+### Start the server
 rails s
